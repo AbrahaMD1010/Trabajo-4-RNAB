@@ -26,7 +26,7 @@ class HistoryAI:
         """Inicializa la IA con el modelo, la memoria y el prompt personalizado."""
         # Inicializar el modelo de lenguaje Gemini
         self.llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-pro",  # Usar el modelo Gemini Pro
+            model="gemini-2.0-flash",  # Usar el modelo Gemini Pro
             temperature=0.7,
             verbose=True
         )
@@ -48,8 +48,13 @@ class HistoryAI:
                 5. Con respecto al escenario, comienza a generar la historia a partir del escenario pedido, en caso de no ser pedido usa el escenario que mejor se acomode a la historia.
                 6. Ten en cuenta los elementos de la trama pedidos como: Tipo de conflicto, obstáculos, estilo de resolución, ya que esto es importante para que estructures la historia, especialmente con la extensión de esta para que se puedan incluir y desarrollarse todos los elementos de la manera correcta.
                 7. Toma en cuenta el tono y el sentimiento que se quiere conseguir con la historia, es decir, si  se pide que la historia tenga tono humorístico, dramático o satírico, debes incluirlo en la historia al igual que el sentimiento que se quiere expresar.
-                Solo responde con el título y la historia creada, en caso de que se pida una conclusión o moraleja también puedes darla, solo danos el texto plano sin caracteres extraños como para especificar negritas tipo (** **), dado esto genera un JSON con los siguientes campos {{"titulo", "historia"}}.
-
+                Solo responde con el título y la historia creada, en caso de que se pida una conclusión o moraleja también puedes darla, solo danos el texto plano sin caracteres extraños como para especificar negritas tipo (** **), dado esto genera un JSON siguiendo la forma descrita abajo. No agregue ningún atributo que no aparezca en el esquema que se muestra a continuación.
+                ```python
+                {{
+                    titulo: string  # Título de la historia
+                    historia: string  # Texto de la historia
+                }}.
+                ```
                 los requerimientos para la historia son los siguientes:
                 """
             ),
