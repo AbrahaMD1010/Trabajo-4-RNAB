@@ -21,12 +21,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const data = Object.fromEntries(formData.entries());
         
         // Validar que al menos hay algún dato
-        const hasStructuredData = data.genero || data.personajes || data.escenario || data.tono || data.extension || data.conflicto;
+        const hasStructuredData = data.genero || data.personajes || data.escenario || data.tono || data.extension || data.conflicto || data.publico_objetivo;
         const hasNaturalData = data.descripcion && data.descripcion.trim().length >= 20;
         const hasInteractiveData = data.historia_interactiva && data.historia_interactiva.trim().length >= 20;
         
         if (!hasStructuredData && !hasNaturalData && !hasInteractiveData) {
-            showAlert('Por favor, completa al menos algunos campos del formulario o escribe una descripción libre/interactiva   .', 'warning');
+            showAlert('Por favor, completa al menos algunos campos del formulario o escribe una descripción libre/interactiva (mínimo 20 caracteres).', 'warning');
             return;
         }
 
@@ -153,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 displayStory(result);
                 showAlert('¡Historia regenerada exitosamente!', 'success');
+                updatePlaceholdersAfterGeneration();
             } else {
                 showAlert(`Error: ${result.detail || 'Error desconocido'}`, 'danger');
             }

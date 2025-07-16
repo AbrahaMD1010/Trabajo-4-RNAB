@@ -90,6 +90,32 @@
                                         </div>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="publico_objetivo" class="form-label">
+                                                <i class="bi bi-people me-2"></i>Público Objetivo
+                                            </label>
+                                            <select class="form-select" id="publico_objetivo" name="publico_objetivo">
+                                                <option value="">Selecciona el público objetivo</option>
+                                                <option value="infantil">Infantil</option>
+                                                <option value="adolescentes">Adolescentes</option>
+                                                <option value="jóvenes">Jóvenes</option>
+                                                <option value="adultos">Adultos</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="extension" class="form-label">
+                                                <i class="bi bi-rulers me-2"></i>Extensión
+                                            </label>
+                                            <select class="form-select" id="extension" name="extension">
+                                                <option value="">Selecciona la extensión</option>
+                                                <option value="corta (300-400 palabras)">Corta (300-400 palabras)</option>
+                                                <option value="mediana (400-600 palabras)">Mediana (400-600 palabras)</option>
+                                                <option value="larga (600-800 palabras)">Larga (600-800 palabras)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <div class="mb-3">
                                         <label for="personajes" class="form-label">
                                             <i class="bi bi-people me-2"></i>Personajes
@@ -112,18 +138,6 @@
                                         </label>
                                         <textarea class="form-control" id="conflicto" name="conflicto" rows="3"
                                             placeholder="Describe el problema central, obstáculos y tipo de resolución..."></textarea>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="extension" class="form-label">
-                                            <i class="bi bi-rulers me-2"></i>Extensión
-                                        </label>
-                                        <select class="form-select" id="extension" name="extension">
-                                            <option value="">Selecciona la extensión</option>
-                                            <option value="corta (300-400 palabras)">Corta (300-400 palabras)</option>
-                                            <option value="mediana (400-600 palabras)">Mediana (400-600 palabras)</option>
-                                            <option value="larga (600-800 palabras)">Larga (600-800 palabras)</option>
-                                        </select>
                                     </div>
                                 </div>
 
@@ -163,7 +177,7 @@
                                     <i class="bi bi-trash me-2"></i>Limpiar Memoria
                                 </button>
                                 <button type="button" class="btn btn-outline-secondary me-md-2" id="resetBtn">
-                                    <i class="bi bi-arrow-clockwise me-2"></i>Reiniciar
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Limpiar texto
                                 </button>
                                 <button type="submit" class="btn btn-primary" id="generateBtn">
                                     <i class="bi bi-magic me-2"></i>Generar Historia

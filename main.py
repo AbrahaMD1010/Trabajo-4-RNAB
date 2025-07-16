@@ -35,6 +35,7 @@ class IARequest(BaseModel):
     conflicto: Optional[str] = None
     descripcion: Optional[str] = None
     historia_interactiva: Optional[str] = None
+    publico_objetivo: Optional[str] = None
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -74,7 +75,8 @@ async def ia_endpoint(request: IARequest):
         "extension": request.extension,
         "conflicto": request.conflicto,
         "descripcion": request.descripcion or request.message,
-        "historia_interactiva": request.historia_interactiva
+        "historia_interactiva": request.historia_interactiva,
+        "publico_objetivo": request.publico_objetivo
     }
     
     # Procesar entrada usando el módulo de procesamiento

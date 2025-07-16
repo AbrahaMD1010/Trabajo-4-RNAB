@@ -14,7 +14,7 @@ NARRATIVE_KEYWORDS = {
 # Campos estructurados permitidos
 STRUCTURED_FIELDS = {
     "genero", "personajes", "escenario",
-    "tono", "extension", "conflicto"
+    "tono", "extension", "conflicto", "publico_objetivo"
 }
 
 def process_user_input(data: Dict[str, Any]) -> Tuple[str, List[str]]:
@@ -36,6 +36,7 @@ def process_user_input(data: Dict[str, Any]) -> Tuple[str, List[str]]:
     conflicto = data.get('conflicto', '')
     descripcion = data.get('descripcion', '')
     historia_interactiva = data.get('historia_interactiva', '')
+    publico_objetivo = data.get('publico_objetivo', '')
     
     # Verificar si hay datos de historia interactiva
     if historia_interactiva:
@@ -106,6 +107,8 @@ def process_user_input(data: Dict[str, Any]) -> Tuple[str, List[str]]:
             parts.append(f"El conflicto central es: {data['conflicto']}.")
         if data.get("extension"):
             parts.append(f"La historia debe tener una extensión aproximada de {data['extension']}.")
+        if data.get("publico_objetivo"):
+            parts.append(f"La historia está dirigida a un público {data['publico_objetivo']}.")
         if has_free_text:
             parts.append(f"Descripción adicional: {free_text}")
 
