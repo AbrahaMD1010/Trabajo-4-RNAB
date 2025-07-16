@@ -25,6 +25,44 @@ def process_user_input(data: Dict[str, Any]) -> Tuple[str, List[str]]:
     - user_input: Prompt limpio y unificado.
     - warnings: Lista de sugerencias o advertencias.
     """
+    warnings = []
+    
+    # Obtener datos
+    genero = data.get('genero', '')
+    personajes = data.get('personajes', '')
+    escenario = data.get('escenario', '')
+    tono = data.get('tono', '')
+    extension = data.get('extension', '')
+    conflicto = data.get('conflicto', '')
+    descripcion = data.get('descripcion', '')
+    historia_interactiva = data.get('historia_interactiva', '')
+    
+    # Verificar si hay datos de historia interactiva
+    if historia_interactiva:
+        # Usar prompt específico para historia interactiva
+        prompt = f"""
+        Dado que eres un experto en literatura y creación de historias, quiero que crees una historia interactiva en la que debes abrir decisiones para el usuario como por ejemplo, llegas a una bosque con dos caminos, uno esta lleno de ruidos de bestias y en el otro se dice que hay bandidos, estas opciones debes ser puestas al final de la historia separadas por literales alfabeticos como A), B), debes dejar la historia a ese punto y permitir que el usuario tome la decisión, la cual debe ser relevante para la historia, algo muy importante a tener en cuenta es que no debes alargar ls historia de manera innecesaria, y cuando la historia ya llegue a su fin entregame toda la historia completa desde el inicio de la generación. Para crear la historia debes  tener en cuenta las siguientes reglas para crear una buena historia:
+                1. Usa el genero que se te indique en los requerimientos, debes ceñirte muy bien a las características de dicho genero para crear la historia, es decir, los cuentos se caracterizan por tener introducción, nudo y desenlace, por lo que debes estructurar la historia de la manera correcta, si el género no es especificado, debes tener en cuenta los demás requerimientos para escoger un género con el fin de crear una historia interesante, puedes tener en cuenta aspectos como ambientación, personajes, sentimiento deseado a transmitir, etc.
+                2. Ten presente la extensión que se pide para crear la historia, si esta no es especificada, crea la historia con un rango de 300 a 800 palabras.
+                3. Asegúrate de mantener coherencia narrativa y estructural entre los hechos de la historia, conversaciones, personajes y demás.
+                4. Debes tener en cuenta los personajes que se piden en la historia, recuerda crearlos con respecto a su personalidad, cualidadades y caracteristicas establecidas desde el inicio, estas no deben cambiar a no ser de que la historia lo requiera, por ejemplo, en caso de que un personaje requiera un desarrollo o un cambio debido a los hechos ocurridos. si  no se especifican los personajes o parte de sus caracteristicas, crea personajes coherentes con los demás aspectos de la historia, adicionalmente asegúrate de crear conversaciones coherentes con la historia, características y personalidades de los personajes.
+                5. Con respecto al escenario, comienza a generar la historia a partir del escenario pedido, en caso de no ser pedido usa el escenario que mejor se acomode a la historia.
+                6. Ten en cuenta los elementos de la trama pedidos como: Tipo de conflicto, obstáculos, estilo de resolución, ya que esto es importante para que estructures la historia, especialmente con la extensión de esta para que se puedan incluir y desarrollarse todos los elementos de la manera correcta.
+                7. Toma en cuenta el tono y el sentimiento que se quiere conseguir con la historia, es decir, si  se pide que la historia tenga tono humorístico, dramático o satírico, debes incluirlo en la historia al igual que el sentimiento que se quiere expresar.
+                Solo responde con el título y la historia creada, en caso de que se pida una conclusión o moraleja también puedes darla, solo danos el texto plano sin caracteres extraños como para especificar negritas tipo (** **), dado esto genera un JSON siguiendo la forma descrita abajo. No agregue ningún atributo que no aparezca en el esquema que se muestra a continuación.
+                ```python
+                {{
+                    titulo: string  # Título de la historia
+                    historia: string  # Texto de la historia
+                }}.
+                ```
+        
+        Descripción de la historia interactiva: {historia_interactiva}
+        """
+        
+        warnings.append("Historia interactiva detectada - se incluirán puntos de decisión")
+        return prompt, warnings
+    
     has_structured = any(
         field in data and data.get(field)
         for field in STRUCTURED_FIELDS

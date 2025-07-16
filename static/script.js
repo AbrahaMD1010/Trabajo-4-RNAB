@@ -22,9 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Validar que al menos hay algún dato
         const hasStructuredData = data.genero || data.personajes || data.escenario || data.tono || data.extension || data.conflicto;
         const hasNaturalData = data.descripcion && data.descripcion.trim().length >= 20;
+        const hasInteractiveData = data.historia_interactiva && data.historia_interactiva.trim().length >= 20;
         
-        if (!hasStructuredData && !hasNaturalData) {
-            showAlert('Por favor, completa al menos algunos campos del formulario o escribe una descripción libre (mínimo 20 caracteres).', 'warning');
+        if (!hasStructuredData && !hasNaturalData && !hasInteractiveData) {
+            showAlert('Por favor, completa al menos algunos campos del formulario o escribe una descripción libre/interactiva   .', 'warning');
             return;
         }
 
@@ -221,6 +222,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const descripcionField = document.getElementById('descripcion');
     if (descripcionField) {
         descripcionField.addEventListener('input', function() {
+            const length = this.value.trim().length;
+            const minLength = 20;
+            
+            if (length > 0 && length < minLength) {
+                this.setCustomValidity(`Mínimo ${minLength} caracteres (actual: ${length})`);
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    }
+
+    // Validación en tiempo real para historia interactiva
+    const historiaInteractivaField = document.getElementById('historia_interactiva');
+    if (historiaInteractivaField) {
+        historiaInteractivaField.addEventListener('input', function() {
             const length = this.value.trim().length;
             const minLength = 20;
             

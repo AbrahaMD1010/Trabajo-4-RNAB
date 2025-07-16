@@ -47,6 +47,11 @@
                                         <i class="bi bi-chat-text me-2"></i>Descripción Libre
                                     </button>
                                 </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="interactive-tab" data-bs-toggle="tab" data-bs-target="#interactive" type="button" role="tab">
+                                        <i class="bi bi-joystick me-2"></i>Historia Interactiva
+                                    </button>
+                                </li>
                             </ul>
 
                             <div class="tab-content" id="inputTabsContent">
@@ -133,6 +138,21 @@
                                         <div class="form-text">
                                             <i class="bi bi-info-circle me-1"></i>
                                             Incluye palabras clave como: historia, personaje, escenario, conflicto, aventura, drama, etc.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Historia Interactiva -->
+                                <div class="tab-pane fade" id="interactive" role="tabpanel">
+                                    <div class="mb-3">
+                                        <label for="historia_interactiva" class="form-label">
+                                            <i class="bi bi-joystick me-2"></i>Describe tu Historia Interactiva
+                                        </label>
+                                        <textarea class="form-control" id="historia_interactiva" name="historia_interactiva" rows="8"
+                                            placeholder="Describe la historia interactiva que quieres que genere la IA. La IA creará una historia con puntos de decisión donde tú puedes elegir el rumbo. Incluye detalles sobre personajes, escenario, género, tono, conflicto, etc. Mínimo 20 caracteres."></textarea>
+                                        <div class="form-text">
+                                            <i class="bi bi-info-circle me-1"></i>
+                                            Las historias interactivas incluyen puntos de decisión donde puedes influir en el desarrollo de la narrativa.
                                         </div>
                                     </div>
                                 </div>
