@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Variables para almacenar el último resultado
     let lastStoryData = null;
     let lastFormData = null;
+    let isFirstGeneration = true; // Variable para trackear si es la primera generación
 
     // Manejar envío del formulario
     storyForm.addEventListener('submit', async function(e) {
@@ -117,6 +118,10 @@ document.addEventListener('DOMContentLoaded', function() {
             resultContainer.style.display = 'block';
             resultContainer.scrollIntoView({ behavior: 'smooth' });
 
+            // *** AGREGAR ESTA LÍNEA ***
+            // Actualizar placeholders después de la primera generación exitosa
+            updatePlaceholdersAfterGeneration();
+
         } catch (error) {
             console.error('Error al procesar la historia:', error);
             showAlert('Error al procesar la respuesta de la IA.', 'danger');
@@ -182,7 +187,22 @@ document.addEventListener('DOMContentLoaded', function() {
         clearAlerts();
         lastStoryData = null;
         lastFormData = null;
-        showAlert('Formulario reiniciado.', 'info');
+        
+        // Restaurar placeholders originales
+        const descripcionField = document.getElementById('descripcion');
+        if (descripcionField) {
+            descripcionField.placeholder = "Describe libremente la historia que quieres que genere la IA. Incluye detalles sobre personajes, escenario, género, tono, conflicto, etc. Mínimo 20 caracteres.";
+        }
+        
+        const historiaInteractivaField = document.getElementById('historia_interactiva');
+        if (historiaInteractivaField) {
+            historiaInteractivaField.placeholder = "Describe la historia interactiva que quieres que genere la IA. La IA creará una historia con puntos de decisión donde tú puedes elegir el rumbo. Incluye detalles sobre personajes, escenario, género, tono, conflicto, etc. Mínimo 20 caracteres.";
+        }
+        
+        // Resetear bandera
+        isFirstGeneration = true;
+        
+        showAlert('<i class="bi bi-info-circle me-2"></i>Formulario reiniciado', 'info');
     });
 
     // Funciones auxiliares
@@ -289,6 +309,21 @@ document.addEventListener('DOMContentLoaded', function() {
             // Verificar si la operación fue exitosa
             if (data.success || data.message) {
                 showAlert('✅ Memoria del LLM limpiada exitosamente. Las siguientes historias no tendrán contexto previo.', 'success');
+                
+                // Restaurar placeholders originales al limpiar memoria
+                const descripcionField = document.getElementById('descripcion');
+                if (descripcionField) {
+                    descripcionField.placeholder = "Describe libremente la historia que quieres que genere la IA. Incluye detalles sobre personajes, escenario, género, tono, conflicto, etc. Mínimo 20 caracteres.";
+                }
+                
+                const historiaInteractivaField = document.getElementById('historia_interactiva');
+                if (historiaInteractivaField) {
+                    historiaInteractivaField.placeholder = "Describe la historia interactiva que quieres que genere la IA. La IA creará una historia con puntos de decisión donde tú puedes elegir el rumbo. Incluye detalles sobre personajes, escenario, género, tono, conflicto, etc. Mínimo 20 caracteres.";
+                }
+                
+                // Resetear bandera
+                isFirstGeneration = true;
+                
             } else {
                 throw new Error('Respuesta inesperada del servidor');
             }
@@ -307,5 +342,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetMemoryBtn = document.getElementById('resetMemoryBtn');
     if (resetMemoryBtn) {
         resetMemoryBtn.addEventListener('click', resetMemory);
+    }
+
+    // Función para actualizar placeholders después de generar una historia
+    function updatePlaceholdersAfterGeneration() {
+        if (isFirstGeneration) {
+            // Cambiar placeholder para descripción libre
+            const descripcionField = document.getElementById('descripcion');
+            if (descripcionField) {
+                descripcionField.placeholder = "Puedes continuar agregando personajes, ideas, conflictos, o modificar completamente cualquier aspecto de la historia.";
+            }
+            
+            // Cambiar placeholder para historia interactiva
+            const historiaInteractivaField = document.getElementById('historia_interactiva');
+            if (historiaInteractivaField) {
+                historiaInteractivaField.placeholder = "Debes elegir cual decisión quieres tomar para darle rumbo a tu historia";
+            }
+            
+            isFirstGeneration = false;
+        }
     }
 });
