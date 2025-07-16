@@ -10,7 +10,7 @@ from langchain.prompts import ( # type: ignore
 )
 from dotenv import load_dotenv # type: ignore
 
-# esto es un comentario
+
 # Cargar variables de entorno desde el archivo .env
 load_dotenv()
 print("GOOGLE_API_KEY:", os.getenv("GOOGLE_API_KEY"))

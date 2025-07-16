@@ -1,6 +1,6 @@
 import re
 from fastapi import HTTPException
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Any
 
 # Módulo de Procesamiento de Entradas
 # Maneja entradas estructuradas, libre y mixtas para generar un prompt coherente
@@ -17,7 +17,7 @@ STRUCTURED_FIELDS = {
     "tono", "extension", "conflicto"
 }
 
-def process_user_input(data: Dict[str, any]) -> Tuple[str, List[str]]:
+def process_user_input(data: Dict[str, Any]) -> Tuple[str, List[str]]:
     """
     Valida y transforma la entrada del usuario en un texto plano para el modelo generador.
 
