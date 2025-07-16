@@ -58,7 +58,11 @@ async def ia_endpoint(request: IARequest):
     
     if request.reset_memory:
         history_ai.reset_memory()
-        return {"message": "Memoria de conversación reiniciada"}
+        return {
+            "success": True,
+            "message": "Memoria de conversación reiniciada exitosamente",
+            "response": "Memoria limpiada"
+        }
     
     # Preparar datos para el procesador de entrada
     input_data = {

@@ -1,7 +1,8 @@
 body {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: linear-gradient(135deg, #2575fc 0%, #1e3c72 100%);
     min-height: 100vh;
-    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-top: 0;
 }
 
 h1, .display-4 {
@@ -74,22 +75,58 @@ h1, .display-4 {
 
 .btn-outline-light {
     border-color: rgba(255,255,255,0.5);
-    color: #fff;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    color: white;
 }
 
 .btn-outline-light:hover {
     background-color: rgba(255,255,255,0.1);
-    border-color: #fff;
-    color: #fff;
+    border-color: white;
+}
+
+.btn-outline-warning {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+
+.btn-outline-warning:hover {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+
+.btn-outline-warning:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Animación para el botón cuando está procesando */
+.btn-outline-warning:disabled .bi-hourglass-split {
+    animation: spin 1s linear infinite;
+}
+
+/* Contenedor de alertas fijo en la parte superior */
+#alertsContainer {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    z-index: 1050;
+    pointer-events: none;
+}
+
+#alertsContainer .alert {
+    pointer-events: auto;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 .card {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px 0 #00000033;
 }
 
 .card-header {
@@ -124,15 +161,11 @@ h1, .display-4 {
 
 /* Resultado de la historia */
 .result-beauty {
-    background: linear-gradient(120deg, #2575fc 0%, #6a11cb 100%);
-    border-radius: 28px;
-    box-shadow: 0 8px 32px 0 #00000033;
-    padding: 2.5rem 2rem 2rem 2rem;
-    margin: 2rem auto 0 auto;
-    max-width: 100%;
-    color: #fff;
-    position: relative;
-    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    color: white;
     text-align: center;
 }
 
@@ -149,37 +182,28 @@ h1, .display-4 {
 }
 
 .result-beauty .icon-circle {
-    background: rgba(255,255,255,0.18);
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    width: 70px;
-    height: 70px;
+    background: rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1.2rem auto;
-    font-size: 2.5rem;
-    box-shadow: 0 2px 12px #0002;
-    position: relative;
-    z-index: 1;
+    margin: 0 auto;
+    font-size: 2rem;
 }
 
 .result-beauty .score-label {
-    font-size: 1.1rem;
-    color: #d1e6ff;
-    margin-bottom: 0.2rem;
-    position: relative;
-    z-index: 1;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
 }
 
 .result-beauty .prob-value {
     font-size: 1.1rem;
-    font-weight: 400;
-    color: #e0eaff;
-    margin-bottom: 1rem;
     line-height: 1.6;
-    text-align: left;
-    position: relative;
-    z-index: 1;
+    text-align: justify;
+    margin-bottom: 1rem;
 }
 
 .result-beauty .card-footer {
@@ -199,31 +223,11 @@ h1, .display-4 {
     height: 3rem;
 }
 
-/* Alertas */
+/* Alertas - mantener colores estándar de Bootstrap */
 .alert {
     border-radius: 10px;
     border: none;
     box-shadow: 0 2px 8px #00000022;
-}
-
-.alert-success {
-    background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
-    color: #fff;
-}
-
-.alert-warning {
-    background: linear-gradient(90deg, #ffc107 0%, #fd7e14 100%);
-    color: #212529;
-}
-
-.alert-danger {
-    background: linear-gradient(90deg, #dc3545 0%, #e83e8c 100%);
-    color: #fff;
-}
-
-.alert-info {
-    background: linear-gradient(90deg, #17a2b8 0%, #20c997 100%);
-    color: #fff;
 }
 
 /* Responsive */
@@ -269,4 +273,9 @@ h1, .display-4 {
 .btn:hover {
     transform: translateY(-2px);
     transition: transform 0.3s ease;
-} 
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

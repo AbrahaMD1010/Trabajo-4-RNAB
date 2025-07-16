@@ -48,7 +48,7 @@ class HistoryAI:
                 5. Con respecto al escenario, comienza a generar la historia a partir del escenario pedido, en caso de no ser pedido usa el escenario que mejor se acomode a la historia.
                 6. Ten en cuenta los elementos de la trama pedidos como: Tipo de conflicto, obstáculos, estilo de resolución, ya que esto es importante para que estructures la historia, especialmente con la extensión de esta para que se puedan incluir y desarrollarse todos los elementos de la manera correcta.
                 7. Toma en cuenta el tono y el sentimiento que se quiere conseguir con la historia, es decir, si  se pide que la historia tenga tono humorístico, dramático o satírico, debes incluirlo en la historia al igual que el sentimiento que se quiere expresar.
-                Solo responde con el título y la historia creada, en caso de que se pida una conclusión o moraleja también puedes darla, solo danos el texto plano sin caracteres extraños como para especificar negritas tipo (** **), dado esto genera un JSON con los siguientes campos {{"titulo", "historia", "moraleja", "conclusión"}}, debes tener en cuenta que los campos de moraleja y conclusión solo serán creados y agregados al JSON en caso de que se te pida.
+                Solo responde con el título y la historia creada, en caso de que se pida una conclusión o moraleja también puedes darla, solo danos el texto plano sin caracteres extraños como para especificar negritas tipo (** **), dado esto genera un JSON con los siguientes campos {{"titulo", "historia"}}.
 
                 los requerimientos para la historia son los siguientes:
                 """
@@ -75,7 +75,8 @@ class HistoryAI:
         Returns:
             str: La respuesta de la IA
         """
-        return self.conversation.predict(input=message)
+        response = self.conversation.predict(input=message)
+        return response
     
     def reset_memory(self):
         """Reinicia la memoria de la conversación."""

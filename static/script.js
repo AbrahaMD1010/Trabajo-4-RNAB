@@ -204,12 +204,13 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         alertsContainer.appendChild(alertDiv);
 
-        // Auto-remover después de 5 segundos
+        // Auto-remover después de 8 segundos para la alerta de memoria
+        const duration = message.includes('Memoria del LLM') ? 8000 : 5000;
         setTimeout(() => {
             if (alertDiv.parentNode) {
                 alertDiv.remove();
             }
-        }, 5000);
+        }, duration);
     }
 
     function clearAlerts() {
@@ -245,4 +246,50 @@ document.addEventListener('DOMContentLoaded', function() {
     tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
-}); 
+
+    // Función para resetear la memoria del LLM
+    async function resetMemory() {
+        try {
+            const resetMemoryBtn = document.getElementById('resetMemoryBtn');
+            resetMemoryBtn.disabled = true;
+            resetMemoryBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Limpiando...';
+            
+            const response = await fetch('/ia', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    reset_memory: true
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor');
+            }
+
+            const data = await response.json();
+            
+            // Verificar si la operación fue exitosa
+            if (data.success || data.message) {
+                showAlert('✅ Memoria del LLM limpiada exitosamente. Las siguientes historias no tendrán contexto previo.', 'success');
+            } else {
+                throw new Error('Respuesta inesperada del servidor');
+            }
+            
+        } catch (error) {
+            console.error('Error al resetear memoria:', error);
+            showAlert('❌ Error al limpiar la memoria. Intenta nuevamente.', 'danger');
+        } finally {
+            const resetMemoryBtn = document.getElementById('resetMemoryBtn');
+            resetMemoryBtn.disabled = false;
+            resetMemoryBtn.innerHTML = '<i class="bi bi-trash me-2"></i>Limpiar Memoria';
+        }
+    }
+
+    // Agregar event listener para el botón de limpiar memoria
+    const resetMemoryBtn = document.getElementById('resetMemoryBtn');
+    if (resetMemoryBtn) {
+        resetMemoryBtn.addEventListener('click', resetMemory);
+    }
+});
