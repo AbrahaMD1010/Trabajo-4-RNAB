@@ -464,4 +464,49 @@ document.addEventListener('DOMContentLoaded', function() {
             console.warn('Error al limpiar localStorage:', error);
         }
     }
+
+    // Función para generar imagen a partir de la historia
+    const generateImageBtn = document.getElementById('generateImageBtn');
+    if (generateImageBtn) {
+        generateImageBtn.addEventListener('click', async function() {
+            if (!lastStoryData || !lastStoryData.historia) {
+                showAlert('Primero genera una historia antes de crear la imagen.', 'warning');
+                return;
+            }
+
+            // Usar el título y la historia como prompt
+            const prompt = `${lastStoryData.titulo || ''}. ${lastStoryData.historia}`;
+
+            generateImageBtn.disabled = true;
+            generateImageBtn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Generando...';
+
+            showAlert('Generando imagen, esto puede tardar unos segundos...', 'info');
+
+            try {
+                const response = await fetch('/generate-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    // Mostrar la imagen
+                    const imageContainer = document.getElementById('imageContainer');
+                    const generatedImage = document.getElementById('generatedImage');
+                    generatedImage.src = `data:image/png;base64,${data.image_base64}`;
+                    imageContainer.style.display = 'block';
+                    showAlert('¡Imagen generada exitosamente!', 'success');
+                    imageContainer.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    showAlert('No se pudo generar la imagen.', 'danger');
+                }
+            } catch (error) {
+                showAlert('Error al generar la imagen.', 'danger');
+            } finally {
+                generateImageBtn.disabled = false;
+                generateImageBtn.innerHTML = '<i class="bi bi-image me-1"></i>Generar Imagen';
+            }
+        });
+    }
 });
