@@ -11,7 +11,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copiar el resto del código de la aplicación al contenedor
-COPY ./src /app/src
+COPY . .
 
 # Exponer el puerto en el que la aplicación correrá
 EXPOSE 8082
