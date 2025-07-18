@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from typing import Optional, Dict, Any
 from history_ai import history_ai
 from entrada_processor import process_user_input
+from image_prompt import generate_image_pollinations
 import json
 
 app = FastAPI()
@@ -36,6 +37,9 @@ class IARequest(BaseModel):
     descripcion: Optional[str] = None
     historia_interactiva: Optional[str] = None
     publico_objetivo: Optional[str] = None
+
+class ImageRequest(BaseModel):
+    prompt: str
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -99,4 +103,15 @@ async def ia_endpoint(request: IARequest):
             status_code=500,
             detail=f"Error al procesar el mensaje: {str(e)}"
         )
+
+@app.post("/generate-image")
+async def generate_image(request: ImageRequest):
+    """
+    Endpoint para generar una imagen usando Pollinations.
+    """
+    img_base64 = generate_image_pollinations(request.prompt)
+    if img_base64:
+        return {"success": True, "image_base64": img_base64}
+    else:
+        raise HTTPException(status_code=500, detail="No se pudo generar la imagen")
 
