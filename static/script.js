@@ -12,6 +12,17 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastFormData = null;
     let isFirstGeneration = true; // Variable para trackear si es la primera generación
 
+    // LocalStorage keys
+    const FORM_DATA_KEY = 'storyGenerator_formData';
+    const ACTIVE_TAB_KEY = 'storyGenerator_activeTab';
+
+    // Cargar datos del localStorage al inicio
+    loadFormDataFromStorage();
+    loadActiveTabFromStorage();
+
+    // Configurar auto-guardado para todos los campos del formulario
+    setupAutoSave();
+
     // Manejar envío del formulario
     storyForm.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -189,6 +200,9 @@ document.addEventListener('DOMContentLoaded', function() {
         lastStoryData = null;
         lastFormData = null;
         
+        // Limpiar localStorage
+        clearFormDataFromStorage();
+        
         // Restaurar placeholders originales
         const descripcionField = document.getElementById('descripcion');
         if (descripcionField) {
@@ -203,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Resetear bandera
         isFirstGeneration = true;
         
-        showAlert('<i class="bi bi-info-circle me-2"></i>Formulario reiniciado', 'info');
+        showAlert('<i class="bi bi-info-circle me-2"></i>Formulario reiniciado y datos eliminados del almacenamiento local', 'info');
     });
 
     // Funciones auxiliares
@@ -275,6 +289,8 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             // Limpiar validaciones al cambiar de pestaña
             clearAlerts();
+            // Guardar pestaña activa
+            saveActiveTabToStorage(this.getAttribute('data-bs-target'));
         });
     });
 
@@ -345,22 +361,107 @@ document.addEventListener('DOMContentLoaded', function() {
         resetMemoryBtn.addEventListener('click', resetMemory);
     }
 
-    // Función para actualizar placeholders después de generar una historia
-    function updatePlaceholdersAfterGeneration() {
-        if (isFirstGeneration) {
-            // Cambiar placeholder para descripción libre
-            const descripcionField = document.getElementById('descripcion');
-            if (descripcionField) {
-                descripcionField.placeholder = "Puedes continuar agregando personajes, ideas, conflictos, o modificar completamente cualquier aspecto de la historia.";
-            }
+    // Función para configurar auto-guardado
+    function setupAutoSave() {
+        // Obtener todos los campos del formulario
+        const formFields = storyForm.querySelectorAll('input, select, textarea');
+        
+        formFields.forEach(field => {
+            // Guardar en localStorage cada vez que el usuario modifica un campo
+            field.addEventListener('input', saveFormDataToStorage);
+            field.addEventListener('change', saveFormDataToStorage);
+        });
+    }
+
+    // Función para guardar datos del formulario en localStorage
+    function saveFormDataToStorage() {
+        try {
+            const formData = new FormData(storyForm);
+            const data = Object.fromEntries(formData.entries());
             
-            // Cambiar placeholder para historia interactiva
-            const historiaInteractivaField = document.getElementById('historia_interactiva');
-            if (historiaInteractivaField) {
-                historiaInteractivaField.placeholder = "Debes elegir cual decisión quieres tomar para darle rumbo a tu historia";
-            }
+            // Filtrar campos vacíos para ahorrar espacio
+            const filteredData = {};
+            Object.entries(data).forEach(([key, value]) => {
+                if (value && value.trim() !== '') {
+                    filteredData[key] = value;
+                }
+            });
             
-            isFirstGeneration = false;
+            localStorage.setItem(FORM_DATA_KEY, JSON.stringify(filteredData));
+        } catch (error) {
+            console.warn('Error al guardar datos en localStorage:', error);
+        }
+    }
+
+    // Función para cargar datos del formulario desde localStorage
+    function loadFormDataFromStorage() {
+        try {
+            const savedData = localStorage.getItem(FORM_DATA_KEY);
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // Restaurar valores en los campos
+                Object.entries(data).forEach(([fieldName, value]) => {
+                    const field = storyForm.querySelector(`[name="${fieldName}"]`);
+                    if (field) {
+                        field.value = value;
+                    }
+                });
+                
+                // Mostrar mensaje informativo si hay datos guardados
+                if (Object.keys(data).length > 0) {
+                    showAlert('<i class="bi bi-clock-history me-2"></i>Datos del formulario restaurados desde la sesión anterior', 'info');
+                }
+            }
+        } catch (error) {
+            console.warn('Error al cargar datos desde localStorage:', error);
+        }
+    }
+
+    // Función para guardar la pestaña activa
+    function saveActiveTabToStorage(tabTarget) {
+        try {
+            localStorage.setItem(ACTIVE_TAB_KEY, tabTarget);
+        } catch (error) {
+            console.warn('Error al guardar pestaña activa:', error);
+        }
+    }
+
+    // Función para cargar la pestaña activa
+    function loadActiveTabFromStorage() {
+        try {
+            const savedTab = localStorage.getItem(ACTIVE_TAB_KEY);
+            if (savedTab) {
+                // Encontrar y activar la pestaña guardada
+                const tabButton = document.querySelector(`[data-bs-target="${savedTab}"]`);
+                const tabPane = document.querySelector(savedTab);
+                
+                if (tabButton && tabPane) {
+                    // Desactivar todas las pestañas
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    document.querySelectorAll('.tab-pane').forEach(pane => {
+                        pane.classList.remove('show', 'active');
+                    });
+                    
+                    // Activar la pestaña guardada
+                    tabButton.classList.add('active');
+                    tabPane.classList.add('show', 'active');
+                }
+            }
+        } catch (error) {
+            console.warn('Error al cargar pestaña activa:', error);
+        }
+    }
+
+    // Función para limpiar datos del localStorage
+    function clearFormDataFromStorage() {
+        try {
+            localStorage.removeItem(FORM_DATA_KEY);
+            localStorage.removeItem(ACTIVE_TAB_KEY);
+        } catch (error) {
+            console.warn('Error al limpiar localStorage:', error);
         }
     }
 });

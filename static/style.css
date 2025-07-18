@@ -279,3 +279,18 @@ h1, .display-4 {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.btn-outline-info {
+    border-color: #0dcaf0;
+    color: #0dcaf0;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-info:hover {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+    color: #000;
+    transform: translateY(-2px);
+}
